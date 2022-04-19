@@ -50,7 +50,7 @@ function App() {
     initApp().then(() => setLoading(false));
   }, [initApp])  //[setBasket]
 
-   //Dark mode or light mode 
+  //Dark mode or light mode 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light'
   const theme = createTheme({
@@ -76,27 +76,29 @@ function App() {
       <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
       <CssBaseline />
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-      <Container>
-        {/* Switch component makes all below routes exclusive now, so there can only be one route in one time */}
-        <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route exact path='/catalog' component={Catalog} />
-          <Route path='/catalog/:id' component={ProductDetails} />
-          <Route path='/about' component={AboutPage} />
-          <Route path='/contact' component={ContactPage} />
-          <Route path='/server-error' component={ServerError} />
-          {/*<Catalog />  -> That will be removed*/}
-           {/* <Catalog products = {products} addProduct={addProduct} /> */ }
-           {/* To add new catalog , the rest of code are written in Catalog.tsx */}  
-          <Route path='/basket' component={BasketPage} />
-          {/* <PrivateRoute path='/checkout' component={CheckoutPage} /> */}
-          <PrivateRoute path='/checkout' component={CheckoutWrapper} />
-          <PrivateRoute path='/orders' component={Orders} />
-          <Route path='/login' component={Login} />
-          <Route path='/register' component={Register} />
-          <Route component={NotFound} />
-        </Switch>
-      </Container>
+      <Route exact path='/' component={HomePage} />
+      <Route path={'/(.+)'} render={() => (
+        <Container sx={{ mt: 4 }}>
+          {/* Switch component makes all below routes exclusive now, so there can only be one route in one time */}
+          <Switch>
+            <Route exact path='/catalog' component={Catalog} />
+            <Route path='/catalog/:id' component={ProductDetails} />
+            <Route path='/about' component={AboutPage} />
+            <Route path='/contact' component={ContactPage} />
+            <Route path='/server-error' component={ServerError} />
+            {/*<Catalog />  -> That will be removed*/}
+            {/* <Catalog products = {products} addProduct={addProduct} /> */}
+            {/* To add new catalog , the rest of code are written in Catalog.tsx */}
+            <Route path='/basket' component={BasketPage} />
+            {/* <PrivateRoute path='/checkout' component={CheckoutPage} /> */}
+            <PrivateRoute path='/checkout' component={CheckoutWrapper} />
+            <PrivateRoute path='/orders' component={Orders} />
+            <Route path='/login' component={Login} />
+            <Route path='/register' component={Register} />
+            <Route component={NotFound} />
+          </Switch>
+        </Container>
+      )} />   {/*This Route is for all pages except Homepage*/}
     </ThemeProvider>
   );
 }
