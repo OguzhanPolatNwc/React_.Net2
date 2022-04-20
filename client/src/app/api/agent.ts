@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { url } from "inspector";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
@@ -50,6 +51,9 @@ axios.interceptors.response.use(async response => {
         case 401:
             toast.error(data.title);
             break;
+        case 403:
+            toast.error('You are now allowed to do that!');
+            break;
         case 500:
             history.push({
                 pathname: '/server-error',
@@ -67,6 +71,29 @@ const requests = {
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),
+    postForm: (url: string, data: FormData) => axios.post(url, data, {
+        headers: {'Content-type': 'multipart/form-data'}
+    }).then(responseBody),
+    putForm: (url: string, data: FormData) => axios.put(url, data, {
+        headers: {'Content-type': 'multipart/form-data'}
+    }).then(responseBody)
+ 
+}
+
+function createFromData(item: any) {
+    let formData = new FormData();
+    for (const key in item) {
+        formData.append(key, item[key])
+    }
+    return formData;
+}
+
+const Admin = {
+    createProduct: (product : any) => requests.postForm('products', createFromData(product)),
+    updateProduct: (product : any) => requests.putForm('products', createFromData(product)),
+    deleteProduct: (id : number) => requests.delete(`products/${id}`)
+
+
 }
 
 const Catalog = {
@@ -112,7 +139,8 @@ const agent = {
     Basket,
     Account,
     Orders,
-    Payments
+    Payments,
+    Admin
 }
 
 export default agent;
