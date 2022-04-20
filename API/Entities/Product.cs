@@ -10,5 +10,8 @@ namespace API.Entities
         public string Type { get; set; }
         public string Brand { get; set; }
         public int QuantityInStock { get; set; }
+
+        //This is reated from cloud and now because it's a string, then we do not have to provide value.
+        public string publicId { get; set; }
     }
 }

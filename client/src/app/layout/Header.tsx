@@ -33,7 +33,7 @@ const navStyles = {
 }
 
 export default function Header({ darkMode, handleThemeChange }: Props) {
-    
+
     //const {basket} = useStoreContext();
     const { basket } = useAppSelector(state => state.basket);
     const { user } = useAppSelector(state => state.account);
@@ -60,6 +60,14 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                             {title.toUpperCase()}
                         </ListItem>
                     ))}
+                    {user && user.roles?.includes('Admin') &&  //Means, inventory will be hidden for anyone who has no admin role
+                    <ListItem
+                        component={NavLink}
+                        to={'/inventory'}
+                        sx={navStyles}
+                    >
+                        INVENTORY
+                    </ListItem>}
                 </List>
                 <Box display='flex' alignItems='center'>
                     {/* so, we directed Link to basket below */}
